@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{.Post.Title}}</title>
+    <link href="/static/css/output.css" rel="stylesheet" />
+  </head>
+
+  <body class="bg-gray-100 text-gray-800">
+    <div class="container mx-auto p-8">
+      <h1 class="text-4xl font-bold text-center text-blue-500">
+        {{.Post.Title}}
+      </h1>
+      <p class="text-gray-600 text-center">{{.Post.Description}}</p>
+      <p class="text-gray-800"><strong>Language:</strong> {{.Post.Language}}</p>
+      <p class="text-sm text-gray-500">{{.Post.Timestamp}}</p>
+      <pre class="bg-gray-100 p-2 mt-2 rounded">{{.Post.Content}}</pre>
+    </div>
+  </body>
+</html>
