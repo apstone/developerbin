@@ -1,11 +1,13 @@
 package main
 
 import (
+	"database/sql"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"log"
+	_ "modernc.org/sqlite"
 	"strings"
 	"time"
 )
@@ -22,12 +24,20 @@ type Post struct {
 var DB *gorm.DB
 
 func initDatabase() {
-	var err error
-	DB, err = gorm.Open(sqlite.Open("posts.db"), &gorm.Config{})
+	sqlDB, err := sql.Open("sqlite", "posts.db")
 	if err != nil {
-		log.Fatal("Failed to connect to the database:", err)
+		log.Fatalf("Failed to open the database: %v", err)
 	}
-	DB.AutoMigrate(&Post{})
+
+	DB, err = gorm.Open(sqlite.Dialector{Conn: sqlDB}, &gorm.Config{})
+	if err != nil {
+		log.Fatalf("Failed to initialize GORM with database connection: %v", err)
+	}
+
+	err = DB.AutoMigrate(&Post{})
+	if err != nil {
+		log.Fatalf("Failed to auto-migrate the database schema: %v", err)
+	}
 }
 
 func truncateCode(content string) string {
