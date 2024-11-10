@@ -6,6 +6,7 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"log"
+	"strings"
 	"time"
 )
 
@@ -27,6 +28,15 @@ func initDatabase() {
 		log.Fatal("Failed to connect to the database:", err)
 	}
 	DB.AutoMigrate(&Post{})
+}
+
+func truncateCode(content string) string {
+	maxLines := 5
+	lines := strings.Split(content, "\n")
+	if len(lines) > maxLines {
+		return strings.Join(lines[:maxLines], "\n") + "\n..."
+	}
+	return content
 }
 
 func setupRoutes(app *fiber.App) {
@@ -65,6 +75,7 @@ func main() {
 	initDatabase()
 
 	engine := html.New("./templates", ".html")
+	engine.AddFunc("truncateCode", truncateCode)
 
 	app := fiber.New(fiber.Config{
 		Views: engine,

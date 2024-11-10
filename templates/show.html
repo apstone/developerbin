@@ -5,17 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{.Post.Title}}</title>
     <link href="/static/css/output.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/atom-one-dark.min.css"
+    />
+    <style>
+      .code-container {
+        background-color: #282c34;
+        border: 1px solid #3c4049;
+        border-radius: 4px;
+        color: #abb2bf;
+        padding: 16px;
+      }
+    </style>
   </head>
 
   <body class="bg-gray-100 text-gray-800">
+    <header class="bg-blue-600 text-white p-4 shadow-md">
+      <div class="container mx-auto">
+        <h1 class="text-3xl font-bold text-center">DeveloperBin</h1>
+      </div>
+    </header>
+
     <div class="container mx-auto p-8">
-      <h1 class="text-4xl font-bold text-center text-blue-500">
+      <a
+        href="/"
+        class="inline-block mb-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
+        >Back</a
+      >
+      <h2 class="text-2xl font-bold text-center text-blue-500 mb-6">
         {{.Post.Title}}
-      </h1>
+      </h2>
       <p class="text-gray-600 text-center">{{.Post.Description}}</p>
       <p class="text-gray-800"><strong>Language:</strong> {{.Post.Language}}</p>
       <p class="text-sm text-gray-500">{{.Post.Timestamp}}</p>
-      <pre class="bg-gray-100 p-2 mt-2 rounded">{{.Post.Content}}</pre>
+      <div class="code-container mt-4 relative">
+        <button
+          onclick="copyCode()"
+          class="absolute top-2 right-2 bg-blue-500 text-white px-2 py-1 rounded text-sm hover:bg-blue-600 transition"
+        >
+          Copy
+        </button>
+        <pre><code class="language-{{.Post.Language}}">{{.Post.Content}}</code></pre>
+      </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll("pre code").forEach((block) => {
+          hljs.highlightElement(block);
+        });
+      });
+      function copyCode() {
+        const codeBlock = document.querySelector("pre code");
+        navigator.clipboard.writeText(codeBlock.innerText).then(() => {
+          alert("Code copied to clipboard!");
+        });
+      }
+    </script>
   </body>
 </html>

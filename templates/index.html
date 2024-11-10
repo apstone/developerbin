@@ -5,27 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>All Posts</title>
     <link href="/static/css/output.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/styles/atom-one-dark.min.css"
+    />
+    <style>
+      .code-snippet {
+        background-color: #282c34;
+        border: 1px solid #3c4049;
+        border-radius: 4px;
+        color: #abb2bf;
+        padding: 8px;
+        font-size: 0.875rem;
+        max-height: 120px;
+        overflow: hidden;
+      }
+    </style>
   </head>
 
   <body class="bg-gray-100 text-gray-800">
+    <header class="bg-blue-600 text-white p-4 shadow-md">
+      <div class="container mx-auto">
+        <h1 class="text-3xl font-bold text-center">DeveloperBin</h1>
+      </div>
+    </header>
+
     <div class="container mx-auto p-8">
-      <h1 class="text-4xl font-bold text-center text-blue-500">All Posts</h1>
+      <h2 class="text-2xl font-bold text-center text-blue-500 mb-6">
+        All Posts
+      </h2>
 
       <a
         href="/posts/new"
-        class="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded"
+        class="mb-4 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition"
         >Create New Post</a
       >
 
-      <div class="mt-8">
+      <div class="mt-8 space-y-6">
         {{range .Posts}}
-        <div class="mb-6 p-4 border-b">
-          <h2 class="text-xl font-semibold">{{.Title}}</h2>
-          <p class="text-gray-600">{{.Description}}</p>
-          <a href="/posts/{{.ID}}" class="text-blue-500">Read More</a>
+        <div class="p-6 bg-white rounded-lg shadow-md border border-gray-200">
+          <h3 class="text-xl font-semibold">{{.Title}}</h3>
+          <p class="text-gray-600 mb-2">{{.Description}}</p>
+          <div class="code-snippet">
+            <pre><code class="language-{{.Language}}">{{truncateCode .Content}}</code></pre>
+          </div>
+          <a
+            href="/posts/{{.ID}}"
+            class="text-blue-500 mt-2 inline-block hover:underline"
+            >Read More</a
+          >
         </div>
         {{end}}
       </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll("pre code").forEach((block) => {
+          hljs.highlightElement(block);
+        });
+      });
+    </script>
   </body>
 </html>
